@@ -22,9 +22,8 @@ export const dynamic = "force-dynamic";
 
 async function getService(): Promise<any[]> {
   try {
-    const response = await fetch(`${BaseUrl}products`, {
-      cache: "no-store",
-    });
+const response = await fetch("/api/products");
+
 
     if (!response.ok) {
       console.error(
