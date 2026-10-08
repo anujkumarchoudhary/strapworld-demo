@@ -323,13 +323,10 @@ export default function FinalCTA({ data }: any) {
               <div className="flex justify-center lg:justify-start">
                 <SaveAndCancel
                   saveText={"Start a Project"}
-                  cancelText={"Explore Our Work"}
                   saveBgColor="#063F3D"
                   cancelBgColor="#FFFFFF"
                   cancelTextColor="#000000"
                   handleClick={() => setOpen(true)}
-                  isButton2={isMobile ? false : true}
-
                 />
               </div>
             </div>
