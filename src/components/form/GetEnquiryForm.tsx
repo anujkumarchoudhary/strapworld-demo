@@ -1,7 +1,7 @@
 
 "use client";
 
-import { BaseUrl } from "@/src/app/baseurl";
+// import { BaseUrl } from "@/src/app/baseurl";
 import React, { useState } from "react";
 
 interface GetEnquiryFormProps {
@@ -128,74 +128,6 @@ const GetEnquiryForm = ({
     return Object.keys(newErrors).length === 0;
   };
 
-const handleSubmit = async (
-  e: React.FormEvent<HTMLFormElement>
-) => {
-  e.preventDefault();
-
-  if (!validateForm()) {
-    return;
-  }
-
-  try {
-    setIsSubmitting(true);
-
-    const response = await fetch(`${BaseUrl}enquiries`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        phone: formData.phone.trim(),
-        message: formData.message.trim(),
-        agree: formData.agree,
-      }),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(
-        result?.message || "Failed to submit enquiry."
-      );
-    }
-
-    console.log("Enquiry submitted:", result);
-
-    alert(
-      "Thank you! Your enquiry has been submitted successfully."
-    );
-
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-      agree: false,
-    });
-
-    setErrors({});
-
-    handleClose();
-
-  } catch (error) {
-    console.error(
-      "Enquiry submission failed:",
-      error
-    );
-
-    alert(
-      error instanceof Error
-        ? error.message
-        : "Something went wrong. Please try again."
-    );
-
-  } finally {
-    setIsSubmitting(false);
-  }
-};
 
   return (
     <div
@@ -229,7 +161,7 @@ const handleSubmit = async (
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} noValidate>
+        <form  noValidate>
           <div className="space-y-2">
 
             {/* Name */}
