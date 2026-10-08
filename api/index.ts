@@ -42,6 +42,6 @@ app.use(async (_req, _res, next) => {
   }
 });
 
-app.use("/api/products", productRoutes);
+// app.use("/api/products", productRoutes);
 
 export default app;
