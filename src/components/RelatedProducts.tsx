@@ -45,12 +45,12 @@ const RelatedProducts = ({ data }: any) => {
             isDart={true}
             isCenter={isDesktop ? false : true}
             isAccentLine={true}
-            label={label}
+            label={"Products"}
             labelColor="#39B972"
             accentColor="#39B972"
             textColor={data?.textColor || "#ffffff"}
             isGradient={true}
-            headingParts={headingParts}
+            headingParts={[{text:"Related Products"}]}
             description={description}
           />
           <div className="hidden lg:flex gap-2 justify-end h-fit mt-auto">

@@ -7,10 +7,18 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/product.controller";
+import upload from "../middleware/upload.middleware";
 
 const router = Router();
 
-router.post("/", createProduct);
+router.post(
+  "/",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "slides", maxCount: 4 },
+  ]),
+  createProduct,
+);
 router.get("/", getProducts);
 
 // Get product by slug

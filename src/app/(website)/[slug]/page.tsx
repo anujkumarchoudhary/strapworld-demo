@@ -9,6 +9,7 @@ import FinalCTA from "@/src/components/FinalCTA";
 import FAQ from "@/src/components/FAQ";
 
 import sData from "./StaticData.json";
+import { BaseUrl } from "../../baseurl";
 
 interface PageProps {
   params: Promise<{
@@ -41,7 +42,7 @@ async function getService(
 ): Promise<ServiceData | null> {
   try {
     const response = await fetch(
-      `https://mintcream-quail-120088.hostingersite.com/api/products/${slug}`,
+      `${BaseUrl}products/${slug}`,
       {
         cache: "no-store",
       }
@@ -182,13 +183,14 @@ const Page = async ({ params }: PageProps) => {
     productOverview,
     technicalOverview,
     relatedProducts,
+    image,
     faqData,
   } = product;
 
   return (
     <main>
       {productOverview && (
-        <ProductOverview data={productOverview} />
+        <ProductOverview data={productOverview} image={image}/>
       )}
 
       {technicalOverview && (

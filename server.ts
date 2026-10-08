@@ -3,15 +3,15 @@ import "dotenv/config";
 import express from "express";
 import next from "next";
 import cors from "cors";
-// import connectDB from "./server/config/db";
-// import userRoutes from "./server/routes/user.routes";
+import {connectDB} from "./backend/config/database";
+import productrRoutes from "./backend/routes/product.routes";
 // import errorMiddleware from "./server/middleware/error.middleware";
 
 const dev = process.env.NODE_ENV !== "production";
 
 const hostname = "0.0.0.0";
 
-const port = Number(process.env.PORT) || 8000;
+const port = Number(process.env.PORT) || 4000;
 
 const nextApp = next({
     dev,
@@ -19,11 +19,17 @@ const nextApp = next({
     port,
 });
 
+console.log("Cloudinary config:", {
+  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  apiKey: process.env.CLOUDINARY_API_KEY,
+  hasSecret: !!process.env.CLOUDINARY_API_SECRET,
+});
+
 const handle = nextApp.getRequestHandler();
 
 const startServer = async () => {
     try {
-        // await connectDB();
+        await connectDB();
 
         await nextApp.prepare();
 
@@ -49,6 +55,7 @@ const startServer = async () => {
             })
         );
 
+        app.use("/products", productrRoutes)
 
         // =========================
         // Health Check

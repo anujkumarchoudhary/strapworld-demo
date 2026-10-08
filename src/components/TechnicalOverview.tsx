@@ -3,14 +3,11 @@
 import Link from "next/link";
 import Heading from "./common/Heading";
 import MaxWidth from "./layout/MaxWidth";
-import Icon from "../utills/iconMap ";
 import { useResponsive } from "../hooks/useResponsive";
-import { MdArrowBack, MdArrowRight, MdCheck } from "react-icons/md";
-import Image from "next/image";
 import SaveAndCancel from "./common/SaveAndCancel";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import { IoShieldCheckmarkOutline } from "react-icons/io5";
 import TechnicalOverviewTable from "./TechnicalOverviewTable";
+import { useState } from "react";
+import GetEnquiryForm from "./form/GetEnquiryForm";
 
 type Service = {
     title: string;
@@ -20,6 +17,7 @@ type Service = {
 };
 
 const TechnicalOverview = ({ data }: any) => {
+    const [open, setOpen] = useState(false)
     const { isDesktop } = useResponsive()
     return (
         <div className="bg-[#FFFFFF] py-12 lg:py-16">
@@ -40,17 +38,17 @@ const TechnicalOverview = ({ data }: any) => {
                             description={data?.description}
                             className="w-[90%]"
                         />
-                        <SaveAndCancel saveText={data?.button} saveBgColor="#000000"/>
+                        <SaveAndCancel saveText={"Get a Quote"} saveBgColor="#000000" handleClick={() => setOpen(!open)} />
                     </div>
 
-           <div>
-                    <TechnicalOverviewTable data={data?.list} />
-
-           </div>
+                    <div>
+                        <TechnicalOverviewTable data={data?.list} />
+                    </div>
 
                 </div>
 
             </MaxWidth>
+            <GetEnquiryForm isOpen={open} handleClose={() => setOpen(!open)} />
         </div>
     );
 };
