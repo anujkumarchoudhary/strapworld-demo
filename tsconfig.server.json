@@ -1,12 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "esModuleInterop": true,
+    "outDir": "dist",
+    "rootDir": ".",
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "outDir": "dist"
+    "resolveJsonModule": true
   },
-  "include": ["server.ts", "src/backend/**/*.ts"]
+  "include": [
+    "server.ts",
+    "server/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next"
+  ]
 }

@@ -1,79 +1,118 @@
+import "dotenv/config";
 
-import dotenv from "dotenv";
 import express from "express";
-import helmet from "helmet";
 import next from "next";
-
-import { connectDB } from "./backend/config/database";
-import enquiryRoutes from "./backend/routes/enquiry.routes";
-
-dotenv.config();
+import cors from "cors";
+// import connectDB from "./server/config/db";
+// import userRoutes from "./server/routes/user.routes";
+// import errorMiddleware from "./server/middleware/error.middleware";
 
 const dev = process.env.NODE_ENV !== "production";
-const HOST = "0.0.0.0";
-const PORT = Number(process.env.PORT) || 3000;
+
+const hostname = "0.0.0.0";
+
+const port = Number(process.env.PORT) || 8000;
 
 const nextApp = next({
-  dev,
-  hostname: HOST,
-  port: PORT,
+    dev,
+    hostname,
+    port,
 });
 
 const handle = nextApp.getRequestHandler();
 
-async function startServer() {
-  try {
-    await connectDB();
+const startServer = async () => {
+    try {
+        // await connectDB();
 
-    await nextApp.prepare();
+        await nextApp.prepare();
 
-    const app = express();
+        const app = express();
 
-    // Security
-    app.use(helmet());
+        // =========================
+        // Middleware
+        // =========================
 
-    // Body parser
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
+        app.use(
+            cors({
+                origin: true,
+                credentials: true,
+            })
+        );
 
-    // API health
-    app.get("/api/health", (_req, res) => {
-      res.status(200).json({
-        success: true,
-        message: "Strap World backend API is running",
-      });
-    });
+        app.use(express.json({ limit: "10mb" }));
 
-    // API routes
-    app.use("/api/enquiries", enquiryRoutes);
+        app.use(
+            express.urlencoded({
+                extended: true,
+                limit: "10mb",
+            })
+        );
 
-    // Next.js
-    app.all("*", (req, res) => {
-      return handle(req, res);
-    });
 
-    app.listen(PORT, HOST, () => {
-      console.log(`
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🚀 SoftQivo Server Started
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =========================
+        // Health Check
+        // =========================
 
-Server:
-http://localhost:${PORT}
+        app.get("/health", (req, res) => {
+            res.status(200).json({
+                success: true,
+                message: "Server is running",
+                environment: process.env.NODE_ENV,
+            });
+        });
+
+        // =========================
+        // API Routes
+        // =========================
+
+        // app.use("/v1/api/users", userRoutes);
+
+        // =========================
+        // Error Middleware
+        // =========================
+
+        // app.use(errorMiddleware);
+
+        // =========================
+        // Next.js
+        // =========================
+
+        app.use((req, res) => {
+            return handle(req, res);
+        });
+
+        // =========================
+        // Start Server
+        // =========================
+
+        app.listen(port, hostname, () => {
+            console.log(`
+========================================
+Server started successfully
+========================================
+
+Environment : ${process.env.NODE_ENV}
+Port        : ${port}
+URL         : http://localhost:${port}
+
+Frontend:
+http://localhost:${port}
 
 API:
-http://localhost:${PORT}/api
+http://localhost:${port}/v1/api
 
 Health:
-http://localhost:${PORT}/api/health
+http://localhost:${port}/health
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+========================================
       `);
-    });
-  } catch (error) {
-    console.error("❌ Failed to start server:", error);
-    process.exit(1);
-  }
-}
+        });
+    } catch (error) {
+        console.error("Server startup failed:", error);
+
+        process.exit(1);
+    }
+};
 
 startServer();
